@@ -1,0 +1,9 @@
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\bin\Debug\netcoreapp3.1\Gymate.Domain.deps.json
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\bin\Debug\netcoreapp3.1\Gymate.Domain.dll
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\bin\Debug\netcoreapp3.1\Gymate.Domain.pdb
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\obj\Debug\netcoreapp3.1\Gymate.Domain.csprojAssemblyReference.cache
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\obj\Debug\netcoreapp3.1\Gymate.Domain.AssemblyInfoInputs.cache
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\obj\Debug\netcoreapp3.1\Gymate.Domain.AssemblyInfo.cs
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\obj\Debug\netcoreapp3.1\Gymate.Domain.csproj.CoreCompileInputs.cache
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\obj\Debug\netcoreapp3.1\Gymate.Domain.dll
+D:\Dokumenty\Aplikacje\Gymate\Gymate.Domain\obj\Debug\netcoreapp3.1\Gymate.Domain.pdb

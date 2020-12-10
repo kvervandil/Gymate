@@ -1,0 +1,12 @@
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.csprojAssemblyReference.cache
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.AssemblyInfoInputs.cache
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.AssemblyInfo.cs
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.csproj.CoreCompileInputs.cache
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\bin\Debug\netcoreapp3.1\Gymate.App.deps.json
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\bin\Debug\netcoreapp3.1\Gymate.App.dll
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\bin\Debug\netcoreapp3.1\Gymate.App.pdb
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\bin\Debug\netcoreapp3.1\Gymate.Domain.dll
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\bin\Debug\netcoreapp3.1\Gymate.Domain.pdb
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.csproj.CopyComplete
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.dll
+D:\Dokumenty\Aplikacje\Gymate\Gymate.App\obj\Debug\netcoreapp3.1\Gymate.App.pdb

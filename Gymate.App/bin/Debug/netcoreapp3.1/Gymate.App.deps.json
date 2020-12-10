@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Gymate.App/1.0.0": {
+        "dependencies": {
+          "Gymate.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Gymate.App.dll": {}
+        }
+      },
+      "Gymate.Domain/1.0.0": {
+        "runtime": {
+          "Gymate.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Gymate.App/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Gymate.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
