@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Gymate.App.Abstract;
-using Gymate.App.Concrete;
 using Gymate.Domain.Entity;
 
 namespace Gymate.App.Managers
@@ -8,19 +7,24 @@ namespace Gymate.App.Managers
     public class RoutineManager
     {
         private IService<Routine> _routineService;
+        private InformationProvider _informationProvider;
 
-        public RoutineManager(IService<Routine> routineService)
+        public RoutineManager(IService<Routine> routineService, InformationProvider informationProvider)
         {
             _routineService = routineService;
+            _informationProvider = informationProvider;
         }
 
-        public int GetRoutineById()
+        public int GetRoutineId()
         {
-            Console.WriteLine("Choose Day of a week: ");
+            _informationProvider.ShowSingleMessage("Choose Day of a week: ");
 
-            _routineService.Items.ForEach(routine => Console.WriteLine($"{routine.Id} - {routine.Name}"));
+            var informationToShowList = new List<string>();
 
-            int.TryParse(Console.ReadKey().KeyChar.ToString(), out var id);
+            _routineService.Items.ForEach(routine => informationToShowList.Add($"{routine.Id} - {routine.Name}"));
+            _informationProvider.ShowMultipleInformation(informationToShowList);
+
+            var id = _informationProvider.GetNumericInputKey();
 
             return id;
         }
@@ -29,7 +33,14 @@ namespace Gymate.App.Managers
         {
             var routine = _routineService.GetItem(routineDayId);
 
-            routine.ExercisesOfTheDay.Add(exercise);
+            if (exercise != null)
+            {
+                routine.ExercisesOfTheDay.Add(exercise);
+            }
+            else
+            {
+                _informationProvider.ShowSingleMessage("Exercise does not exist");
+            }
         }
 
         public void ShowWholeRoutine()
@@ -38,13 +49,27 @@ namespace Gymate.App.Managers
 
             foreach (var routine in routines)
             {
-                Console.WriteLine(routine.Name);
+                _informationProvider.ShowSingleMessage(routine.Name);
+
+                var informationToShowList = new List<string>();
+
                 for (int i = 0; i < routine.ExercisesOfTheDay.Count; i++)
                 {
-                    Console.WriteLine($"{i+1}. {routine.ExercisesOfTheDay[i].Name}");
+                    var exercise = routine.ExercisesOfTheDay[i];
+
+                    informationToShowList.Add($"{i + 1}. {exercise.Name} - {exercise.Sets} x {exercise.Reps} x {exercise.Load}");
                 }
 
-                Console.WriteLine("\n");
+                if (informationToShowList.Count != 0)
+                {
+                    _informationProvider.ShowMultipleInformation(informationToShowList);
+                }
+                else
+                {
+                    _informationProvider.ShowSingleMessage("No exercises added.");
+                }
+
+                _informationProvider.ShowSingleMessage("\n");
             }
         }
     }

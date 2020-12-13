@@ -13,5 +13,8 @@ namespace Gymate.Domain.Entity
 
         public string Name { get; set; }
         public int TypeId { get; set; }
+        public int Sets { get; set; }
+        public int Reps { get; set; }
+        public int Load { get; set; }
     }
 }

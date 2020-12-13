@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Gymate.App.Abstract;
 using Gymate.App.Concrete;
@@ -10,25 +11,33 @@ namespace Gymate.App.Managers
     {
         private readonly MenuActionService _actionService;
         private IService<Exercise> _exerciseService;
+        private InformationProvider _informationProvider;
 
-        public ExerciseManager(MenuActionService actionService, IService<Exercise> exerciseService)
+        public ExerciseManager(MenuActionService actionService, IService<Exercise> exerciseService, InformationProvider informationProvider)
         {
             _exerciseService = exerciseService;
             _actionService = actionService;
+            _informationProvider = informationProvider;
         }
 
         public int AddNewExercise()
         {
             var addNewExerciseMenu = _actionService.GetMenuActionsByMenuName("AddNewExerciseMenu");
 
-            Console.WriteLine("Please select exercise type:");
+            _informationProvider.ShowSingleMessage("Please select exercise type:");
 
-            addNewExerciseMenu.ForEach(menuAction => Console.WriteLine($"{menuAction.Id}. {menuAction.Name}"));
+            var menuActionsToShow = new List<string>();
 
-            int.TryParse(Console.ReadLine(), out var typeId);
+            addNewExerciseMenu.ForEach(menuAction => menuActionsToShow.Add($"{menuAction.Id}. {menuAction.Name}"));
 
-            Console.WriteLine("\nPlease insert name for item: ");
-            var name = Console.ReadLine();
+            _informationProvider.ShowMultipleInformation(menuActionsToShow);
+
+            var typeId = _informationProvider.GetNumericInputKey();
+
+            _informationProvider.ShowSingleMessage("\nPlease insert name for item: ");
+
+            var name = _informationProvider.GetInputString();
+
             var lastId = _exerciseService.GetLastId();
 
             var exercise = new Exercise(lastId + 1, name, typeId);
@@ -40,59 +49,119 @@ namespace Gymate.App.Managers
 
         public void RemoveExercise()
         {
-            Console.WriteLine("Please enter id for exercise you want to remove");
+            _informationProvider.ShowSingleMessage("Please enter id for exercise you want to remove");
 
             ShowAllExercises();
 
-            var operation = Console.ReadKey();
-            int.TryParse(operation.KeyChar.ToString(), out var id);
-            
-            var itemToRemove = _exerciseService.Items.Single(e => e.Id == id);
-            _exerciseService.RemoveItem(itemToRemove);
+            var id = _informationProvider.GetNumericInputKey();
+
+            var itemToRemove = _exerciseService.Items.Find(i => i.Id == id);
+
+            if (itemToRemove != null)
+            {
+                _exerciseService.RemoveItem(itemToRemove);
+            }
         }
 
 
         public void ViewExerciseDetails()
         {
-            Console.WriteLine("Please enter id for exercise you want to show/add");
+            _informationProvider.ShowSingleMessage("Please enter id for exercise you want to show/add");
 
             ShowAllExercises();
 
-            int.TryParse(Console.ReadLine(), out var id);
+            var id = _informationProvider.GetNumericInputKey();
 
             var exerciseToShow = _exerciseService.GetItem(id);
 
-            Console.WriteLine($"Exercise id: {exerciseToShow.Id}");
-            Console.WriteLine($"Exercise name: {exerciseToShow.Name}");
-            Console.WriteLine($"Exercise type id: {exerciseToShow.TypeId}");
+            if (exerciseToShow != null)
+            {
+                List<string> informationToShowList = new List<string>();
+
+                informationToShowList.Add($"Exercise id: {exerciseToShow.Id}");
+                informationToShowList.Add($"Exercise name: {exerciseToShow.Name}");
+                informationToShowList.Add($"Exercise type id: {exerciseToShow.TypeId}");
+
+                _informationProvider.ShowMultipleInformation(informationToShowList);
+            }
+            else
+            {
+                _informationProvider.ShowSingleMessage("No exercise to show.");
+            }
         }
 
         public void ShowAllExercises()
         {
-            _exerciseService.Items.ForEach(exercise => Console.WriteLine($"{exercise.Id} - {exercise.Name}"));
+            var informationToShowList = new List<string>();
+
+            if (_exerciseService.Items.Count != 0)
+            {
+                _exerciseService.Items.ForEach(exercise => informationToShowList.Add($"{exercise.Id} - {exercise.Name}"));
+
+                _informationProvider.ShowMultipleInformation(informationToShowList);
+            }
+            else
+            {
+                _informationProvider.ShowSingleMessage("No exercises added.");
+            }
         }
 
         public void ViewExercisesByTypeId()
         {
-            Console.WriteLine("Please enter Type id for exercise you want to show:");
+            _informationProvider.ShowSingleMessage("Please enter Type id for exercise you want to show:");
 
-            int.TryParse(Console.ReadKey().KeyChar.ToString(), out var typeId);
+            var typeId = _informationProvider.GetNumericInputKey();
 
             var exercisesToShow = _exerciseService.GetAllItems().FindAll(e => e.TypeId == typeId);
 
-            foreach (var exerciseToShow in exercisesToShow)
+            if (exercisesToShow.Count != 0)
             {
-                Console.WriteLine($"\n{exerciseToShow.Id} - {exerciseToShow.Name}");
+                var informationToShowList = new List<string>();
+
+                exercisesToShow.ForEach(exercise => informationToShowList.Add($"\n{exercise.Id} - {exercise.Name}"));
+
+                _informationProvider.ShowMultipleInformation(informationToShowList);
+            }
+            else
+            {
+                _informationProvider.ShowSingleMessage("No exercise to show.");
             }
         }
 
         public Exercise GetExerciseById()
         {
-            Console.WriteLine("Please enter exercise id you want to add");
+            _informationProvider.ShowSingleMessage("Please enter exercise id you want to add");
 
-            int.TryParse(Console.ReadKey().KeyChar.ToString(), out var id);
+            var id = _informationProvider.GetNumericInputKey();
 
             return _exerciseService.GetItem(id);
+        }
+         
+        public void UpdateVolumeInExercise()
+        {
+            ShowAllExercises();
+
+            _informationProvider.ShowSingleMessage("Type id of exercise you want to update: ");
+
+            var id = _informationProvider.GetNumericInputKey();
+
+            var exerciseToUpdate = _exerciseService.GetItem(id);
+
+            _informationProvider.ShowSingleMessage("How many sets?");
+
+            var sets = _informationProvider.GetNumericValue();
+
+            _informationProvider.ShowSingleMessage("How many reps?");
+
+            var reps = _informationProvider.GetNumericValue();
+
+            _informationProvider.ShowSingleMessage("How much load?");
+
+            var load = _informationProvider.GetNumericValue();
+
+            exerciseToUpdate.Sets = sets;
+            exerciseToUpdate.Reps = reps;
+            exerciseToUpdate.Load = load;
         }
     }
 }

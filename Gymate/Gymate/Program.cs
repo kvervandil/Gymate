@@ -10,12 +10,15 @@ namespace Gymate
     {
         static void Main(string[] args)
         {
+            InformationProvider informationProvider = new InformationProvider();
             MenuActionService actionService = new MenuActionService();
             IService<Exercise> exerciseService = new ExerciseService();
             IService<Routine> routineService = new RoutineService();
-            ExerciseManager exerciseManager = new ExerciseManager(actionService, exerciseService);
+            ExerciseManager exerciseManager = new ExerciseManager(actionService,
+                                                                  exerciseService,
+                                                                  informationProvider);
 
-            RoutineManager routineManager = new RoutineManager(routineService);
+            RoutineManager routineManager = new RoutineManager(routineService, informationProvider);
 
             Console.WriteLine("Welcome to Gymate app!");
 
@@ -51,7 +54,7 @@ namespace Gymate
                         exerciseManager.ViewExercisesByTypeId();
                         break;
                     case '6':
-                        var dayOfWeekId = routineManager.GetRoutineById();
+                        var dayOfWeekId = routineManager.GetRoutineId();
                         exerciseManager.ShowAllExercises();
 
                         var exerciseToAdd = exerciseManager.GetExerciseById();
@@ -60,6 +63,9 @@ namespace Gymate
                         break;
                     case '7':
                         routineManager.ShowWholeRoutine();
+                        break;
+                    case '8':
+                        exerciseManager.UpdateVolumeInExercise();
                         break;
 
                     default:

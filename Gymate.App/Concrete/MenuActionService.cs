@@ -37,6 +37,7 @@ namespace Gymate.App.Concrete
             AddItem(new MenuAction(5, "Filter exercises by type id", "Main"));
             AddItem(new MenuAction(6, "Add exercise to day of a week", "Main"));
             AddItem(new MenuAction(7, "Show your week plan", "Main"));
+            AddItem(new MenuAction(8, "Add volume to your exercise", "Main"));
 
             AddItem(new MenuAction(1, "Legs", "AddNewExerciseMenu"));
             AddItem(new MenuAction(2, "Chest", "AddNewExerciseMenu"));
