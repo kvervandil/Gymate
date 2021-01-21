@@ -77,7 +77,7 @@ namespace Gymate.Tests
             objectUnderTest.ShowWholeRoutine();
 
             //Assert
-            informationProviderMock.Verify(m => m.ShowMultipleInformation(new List<string>() { "1. dummyExercise" }), Times.Once);
+            informationProviderMock.Verify(m => m.ShowMultipleInformation(new List<string>() { "1. dummyExercise - 0 x 0 x 0" }), Times.Once);
         }
 
         [Fact]

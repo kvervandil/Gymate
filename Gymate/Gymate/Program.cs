@@ -22,6 +22,9 @@ namespace Gymate
 
             Console.WriteLine("Welcome to Gymate app!");
 
+            exerciseManager.GetAddedExercicesFromFile();
+            routineManager.GetAddedRoutineFromFile();
+
             while (true)
             {
                 Console.WriteLine("Please let me know what you want to do:");
@@ -33,27 +36,27 @@ namespace Gymate
                     Console.WriteLine($"{menuAction.Id}. {menuAction.Name}");
                 }
 
-                var operation = Console.ReadKey();
+                var operation = Console.ReadLine();
                 Console.WriteLine("\n");
 
-                switch (operation.KeyChar)
+                switch (operation)
                 {
-                    case '1':
+                    case "1":
                         exerciseManager.AddNewExercise();
                         break;
-                    case '2':
+                    case "2":
                         exerciseManager.RemoveExercise();
                         break;
-                    case '3':
+                    case "3":
                         exerciseManager.ShowAllExercises();
                         break;
-                    case '4':
+                    case "4":
                         exerciseManager.ViewExerciseDetails();
                         break;
-                    case '5':
+                    case "5":
                         exerciseManager.ViewExercisesByTypeId();
                         break;
-                    case '6':
+                    case "6":
                         var dayOfWeekId = routineManager.GetRoutineId();
                         exerciseManager.ShowAllExercises();
 
@@ -61,13 +64,18 @@ namespace Gymate
 
                         routineManager.AddSelectedExerciseToRoutineDay(dayOfWeekId, exerciseToAdd);
                         break;
-                    case '7':
+                    case "7":
                         routineManager.ShowWholeRoutine();
                         break;
-                    case '8':
+                    case "8":
                         exerciseManager.UpdateVolumeInExercise();
                         break;
-
+                    case "9":
+                        exerciseManager.ExportToXml();
+                        break;
+                    case "10":
+                        routineManager.ExportToXml();
+                        break;
                     default:
                         Console.WriteLine("Action you entered does not exist");
                         break;

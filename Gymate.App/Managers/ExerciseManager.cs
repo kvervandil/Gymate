@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using Gymate.App.Abstract;
 using Gymate.App.Concrete;
 using Gymate.Domain.Entity;
@@ -12,6 +14,7 @@ namespace Gymate.App.Managers
         private readonly MenuActionService _actionService;
         private IService<Exercise> _exerciseService;
         private InformationProvider _informationProvider;
+        private readonly string XmlDestinationPath = @"Gymate.App\Source\exercises.xml";
 
         public ExerciseManager(MenuActionService actionService, IService<Exercise> exerciseService, InformationProvider informationProvider)
         {
@@ -24,7 +27,6 @@ namespace Gymate.App.Managers
         {
             var addNewExerciseMenu = _actionService.GetMenuActionsByMenuName("AddNewExerciseMenu");
 
-            _informationProvider.ShowSingleMessage("Please select exercise type:");
 
             var menuActionsToShow = new List<string>();
 
@@ -32,11 +34,28 @@ namespace Gymate.App.Managers
 
             _informationProvider.ShowMultipleInformation(menuActionsToShow);
 
-            var typeId = _informationProvider.GetNumericInputKey();
+            bool isValidInput = false;
+            int typeId = 0;
 
-            _informationProvider.ShowSingleMessage("\nPlease insert name for item: ");
+            while (!isValidInput)
+            {
+                _informationProvider.ShowSingleMessage("Please select exercise type:");
 
-            var name = _informationProvider.GetInputString();
+                typeId = _informationProvider.GetNumericInputKey();
+                                
+                isValidInput = typeId != 0 && typeId >= menuActionsToShow.Count;
+            }
+
+            isValidInput = false;
+            string name = string.Empty;
+            while(!isValidInput)
+            {
+                _informationProvider.ShowSingleMessage("\nPlease insert name for item: ");
+
+                name = _informationProvider.GetInputString();
+
+                isValidInput = !string.IsNullOrWhiteSpace(name);
+            }
 
             var lastId = _exerciseService.GetLastId();
 
@@ -70,7 +89,7 @@ namespace Gymate.App.Managers
 
             ShowAllExercises();
 
-            var id = _informationProvider.GetNumericInputKey();
+            var id = _informationProvider.GetNumericValue();
 
             var exerciseToShow = _exerciseService.GetItem(id);
 
@@ -88,6 +107,57 @@ namespace Gymate.App.Managers
             {
                 _informationProvider.ShowSingleMessage("No exercise to show.");
             }
+        }
+
+        public void GetAddedExercicesFromFile()
+        {
+            string path = GenerateFilePath();
+
+            if (!File.Exists(path)) return;
+
+            string xml = File.ReadAllText(path);
+
+            if (string.IsNullOrEmpty(xml)) return;
+
+            StringReader stringReader = new StringReader(xml);
+
+            var xmlSerializer = InitialiseXmlSerializer();
+
+            _exerciseService.Items = (List<Exercise>)xmlSerializer.Deserialize(stringReader);
+        }
+
+        public void ExportToXml()
+        {
+            string path = GenerateFilePath();
+
+             var xmlSerializer = InitialiseXmlSerializer();
+
+            using StreamWriter sw = new StreamWriter(path);
+
+            xmlSerializer.Serialize(sw, _exerciseService.Items);
+        }
+
+        private string GenerateFilePath()
+        {
+            string path = Directory.GetCurrentDirectory();
+
+            for (int i = 0; i < 5; i++)
+            {
+                path = Directory.GetParent(path).FullName;
+            }
+
+            return Path.Combine(path, XmlDestinationPath);
+        }
+
+        private XmlSerializer InitialiseXmlSerializer()
+        {
+            XmlRootAttribute root = new XmlRootAttribute();
+
+            root.ElementName = "Exercises";
+
+            root.IsNullable = true;
+
+            return new XmlSerializer(typeof(List<Exercise>), root);
         }
 
         public void ShowAllExercises()
@@ -146,6 +216,12 @@ namespace Gymate.App.Managers
             var id = _informationProvider.GetNumericInputKey();
 
             var exerciseToUpdate = _exerciseService.GetItem(id);
+
+            if (exerciseToUpdate == null)
+            {
+                _informationProvider.ShowSingleMessage("Exercise not found");
+                return;
+            }
 
             _informationProvider.ShowSingleMessage("How many sets?");
 

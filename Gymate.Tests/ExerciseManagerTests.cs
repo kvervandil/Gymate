@@ -91,7 +91,7 @@ namespace Gymate.Tests
 
             var informationProviderMock = new Mock<InformationProvider>();
 
-            informationProviderMock.Setup(m => m.GetNumericInputKey()).Returns(1);
+            informationProviderMock.Setup(m => m.GetNumericValue()).Returns(1);
 
             var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
 
@@ -227,7 +227,7 @@ namespace Gymate.Tests
         }
 
         [Fact]
-        public void Shoud_SetExerciseVolume_When_ExerciseFound()
+        public void Should_SetExerciseVolume_When_ExerciseFound()
         {
             var exercise = new Exercise(1, "dummyExercise", 1);
 
@@ -248,6 +248,27 @@ namespace Gymate.Tests
             Assert.Equal(11, exercise.Sets);
             Assert.Equal(11, exercise.Reps);
             Assert.Equal(11, exercise.Load);
+        }
+
+        [Fact]
+        public void Should_ShowSingleMessage_When_SetExerciseVolumeAndExerciseNotFound()
+        {
+            var exercise = new Exercise(99, "dummyExercise", 40);
+            var informationProviderMock = new Mock<InformationProvider>();
+            var exerciseServiceMock = new Mock<IService<Exercise>>();
+
+            exerciseServiceMock.SetupGet(m => m.Items).Returns(new List<Exercise>());
+
+            exerciseServiceMock.Setup(m => m.GetItem(exercise.Id)).Returns((Exercise)null);
+
+            informationProviderMock.Setup(m => m.GetNumericInputKey()).Returns(exercise.Id);
+            informationProviderMock.Setup(m => m.GetNumericValue()).Returns(11);
+
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+
+            objectUnderTest.UpdateVolumeInExercise();
+
+            informationProviderMock.Verify(m => m.ShowSingleMessage("Exercise not found"), Times.Once);
         }
     }
 }

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gymate.App", "..\Gymate.App
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gymate.Domain", "..\Gymate.Domain\Gymate.Domain.csproj", "{FC292D5B-5D87-4C18-A5F5-96D14AB4A178}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gymate.Tests", "..\Gymate.Tests\Gymate.Tests.csproj", "{FE4A20D3-63A8-47D5-B691-95C03A18B766}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gymate.Tests", "..\Gymate.Tests\Gymate.Tests.csproj", "{FE4A20D3-63A8-47D5-B691-95C03A18B766}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

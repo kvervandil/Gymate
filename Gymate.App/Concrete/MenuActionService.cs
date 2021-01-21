@@ -38,6 +38,8 @@ namespace Gymate.App.Concrete
             AddItem(new MenuAction(6, "Add exercise to day of a week", "Main"));
             AddItem(new MenuAction(7, "Show your week plan", "Main"));
             AddItem(new MenuAction(8, "Add volume to your exercise", "Main"));
+            AddItem(new MenuAction(9, "Export added exercises to xml", "Main"));
+            AddItem(new MenuAction(10, "Export routine to xml", "Main"));
 
             AddItem(new MenuAction(1, "Legs", "AddNewExerciseMenu"));
             AddItem(new MenuAction(2, "Chest", "AddNewExerciseMenu"));
