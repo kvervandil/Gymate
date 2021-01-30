@@ -29,5 +29,13 @@
     </Exercises>
   </Routine>
   <Routine Id="6" />
-  <Routine Id="7" />
+  <Routine Id="7">
+    <Exercises Id="1">
+      <Name>Squat</Name>
+      <Type>0</Type>
+      <Sets>0</Sets>
+      <Reps>0</Reps>
+      <Load>0</Load>
+    </Exercises>
+  </Routine>
 </Routine>

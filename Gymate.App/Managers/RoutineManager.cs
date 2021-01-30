@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
 using Gymate.App.Abstract;
+using Gymate.App.Helpers;
 using Gymate.Domain.Entity;
 
 namespace Gymate.App.Managers
@@ -10,12 +9,13 @@ namespace Gymate.App.Managers
     {
         private IService<Routine> _routineService;
         private InformationProvider _informationProvider;
-        private readonly string XmlDestinationPath = @"Gymate.App\Source\routine.xml";
+        private FileManager _fileManager;
 
-        public RoutineManager(IService<Routine> routineService, InformationProvider informationProvider)
+        public RoutineManager(IService<Routine> routineService, InformationProvider informationProvider, FileManager fileManager)
         {
             _routineService = routineService;
             _informationProvider = informationProvider;
+            _fileManager = fileManager;
         }
 
         public int GetRoutineId()
@@ -78,53 +78,12 @@ namespace Gymate.App.Managers
 
         public void GetAddedRoutineFromFile()
         {
-            string path = GenerateFilePath();
-
-            if (!File.Exists(path)) return;
-
-            string xml = File.ReadAllText(path);
-
-            if (string.IsNullOrEmpty(xml)) return;
-
-            StringReader stringReader = new StringReader(xml);
-
-            var xmlSerializer = InitialiseXmlSerializer();
-
-            _routineService.Items = (List<Routine>)xmlSerializer.Deserialize(stringReader);
+            _routineService.Items = (List<Routine>)_fileManager.GetAddedObjectsFromFile(this);
         }
 
         public void ExportToXml()
         {
-            string path = GenerateFilePath();
-
-            var xmlSerializer = InitialiseXmlSerializer();
-
-            using StreamWriter sw = new StreamWriter(path);
-
-            xmlSerializer.Serialize(sw, _routineService.Items);
-        }
-
-        private string GenerateFilePath()
-        {
-            string path = Directory.GetCurrentDirectory();
-
-            for (int i = 0; i < 5; i++)
-            {
-                path = Directory.GetParent(path).FullName;
-            }
-
-            return Path.Combine(path, XmlDestinationPath);
-        }
-        
-        private XmlSerializer InitialiseXmlSerializer()
-        {
-            XmlRootAttribute root = new XmlRootAttribute();
-
-            root.ElementName = "Routine";
-
-            root.IsNullable = true;
-
-            return new XmlSerializer(typeof(List<Routine>), root);
+            _fileManager.ExportRoutineToXml(_routineService);
         }
     }
 }

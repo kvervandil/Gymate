@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
 using Gymate.App.Abstract;
 using Gymate.App.Concrete;
+using Gymate.App.Helpers;
 using Gymate.Domain.Entity;
 
 namespace Gymate.App.Managers
@@ -14,13 +11,15 @@ namespace Gymate.App.Managers
         private readonly MenuActionService _actionService;
         private IService<Exercise> _exerciseService;
         private InformationProvider _informationProvider;
-        private readonly string XmlDestinationPath = @"Gymate.App\Source\exercises.xml";
+        private FileManager _fileManager;
 
-        public ExerciseManager(MenuActionService actionService, IService<Exercise> exerciseService, InformationProvider informationProvider)
+        public ExerciseManager(MenuActionService actionService, IService<Exercise> exerciseService,
+                               InformationProvider informationProvider, FileManager fileManager)
         {
             _exerciseService = exerciseService;
             _actionService = actionService;
             _informationProvider = informationProvider;
+            _fileManager = fileManager;
         }
 
         public int AddNewExercise()
@@ -43,7 +42,7 @@ namespace Gymate.App.Managers
 
                 typeId = _informationProvider.GetNumericInputKey();
                                 
-                isValidInput = typeId != 0 && typeId >= menuActionsToShow.Count;
+                isValidInput = typeId != 0 && typeId <= menuActionsToShow.Count;
             }
 
             isValidInput = false;
@@ -111,53 +110,12 @@ namespace Gymate.App.Managers
 
         public void GetAddedExercicesFromFile()
         {
-            string path = GenerateFilePath();
-
-            if (!File.Exists(path)) return;
-
-            string xml = File.ReadAllText(path);
-
-            if (string.IsNullOrEmpty(xml)) return;
-
-            StringReader stringReader = new StringReader(xml);
-
-            var xmlSerializer = InitialiseXmlSerializer();
-
-            _exerciseService.Items = (List<Exercise>)xmlSerializer.Deserialize(stringReader);
+            _exerciseService.Items = (List<Exercise>)_fileManager.GetAddedObjectsFromFile(this);
         }
 
         public void ExportToXml()
         {
-            string path = GenerateFilePath();
-
-             var xmlSerializer = InitialiseXmlSerializer();
-
-            using StreamWriter sw = new StreamWriter(path);
-
-            xmlSerializer.Serialize(sw, _exerciseService.Items);
-        }
-
-        private string GenerateFilePath()
-        {
-            string path = Directory.GetCurrentDirectory();
-
-            for (int i = 0; i < 5; i++)
-            {
-                path = Directory.GetParent(path).FullName;
-            }
-
-            return Path.Combine(path, XmlDestinationPath);
-        }
-
-        private XmlSerializer InitialiseXmlSerializer()
-        {
-            XmlRootAttribute root = new XmlRootAttribute();
-
-            root.ElementName = "Exercises";
-
-            root.IsNullable = true;
-
-            return new XmlSerializer(typeof(List<Exercise>), root);
+            _fileManager.ExportExercisesToXml(_exerciseService);
         }
 
         public void ShowAllExercises()
@@ -202,7 +160,7 @@ namespace Gymate.App.Managers
         {
             _informationProvider.ShowSingleMessage("Please enter exercise id you want to add");
 
-            var id = _informationProvider.GetNumericInputKey();
+            var id = _informationProvider.GetNumericValue();
 
             return _exerciseService.GetItem(id);
         }
@@ -213,7 +171,7 @@ namespace Gymate.App.Managers
 
             _informationProvider.ShowSingleMessage("Type id of exercise you want to update: ");
 
-            var id = _informationProvider.GetNumericInputKey();
+            var id = _informationProvider.GetNumericValue();
 
             var exerciseToUpdate = _exerciseService.GetItem(id);
 

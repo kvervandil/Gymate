@@ -1,10 +1,10 @@
 using FluentAssertions;
 using Gymate.App.Abstract;
 using Gymate.App.Concrete;
+using Gymate.App.Helpers;
 using Gymate.App.Managers;
 using Gymate.Domain.Entity;
 using Moq;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -19,12 +19,13 @@ namespace Gymate.Tests
             var exercise = new Exercise(1, "dummyExercise", 1);
             var exerciseServiceMock = new Mock<IService<Exercise>>();
             var informationProviderMock = new Mock<InformationProvider>();
+            var fileManager = new Mock<FileManager>();
 
             exerciseServiceMock.Setup(s => s.GetItem(1)).Returns(exercise);
             informationProviderMock.Setup(e => e.GetNumericInputKey()).Returns(1);
             informationProviderMock.Setup(e => e.GetInputString()).Returns("dummyExercise");
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
 
@@ -50,8 +51,9 @@ namespace Gymate.Tests
             var informationProviderMock = new Mock<InformationProvider>();
 
             informationProviderMock.Setup(m => m.GetNumericInputKey()).Returns(item.Id);
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.RemoveExercise();
@@ -70,8 +72,9 @@ namespace Gymate.Tests
             exerciseServiceMock.SetupGet(m => m.Items).Returns(exerciseList);
 
             var informationProviderMock = new Mock<InformationProvider>();
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.RemoveExercise();
@@ -92,8 +95,9 @@ namespace Gymate.Tests
             var informationProviderMock = new Mock<InformationProvider>();
 
             informationProviderMock.Setup(m => m.GetNumericValue()).Returns(1);
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.ViewExerciseDetails();
@@ -114,8 +118,9 @@ namespace Gymate.Tests
             exerciseServiceMock.Setup(m => m.GetItem(It.IsAny<int>())).Returns(exercise);
 
             var informationProviderMock = new Mock<InformationProvider>();
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             var expectedInformationList = new List<string>() { "Exercise id: 1", "Exercise name: dummyExercise", "Exercise type id: 1" };
 
@@ -132,9 +137,10 @@ namespace Gymate.Tests
             var exerciseServiceMock = new Mock<IService<Exercise>>();
             exerciseServiceMock.SetupGet(m => m.Items).Returns(new List<Exercise>());
 
+            var fileManager = new Mock<FileManager>();
             var informationProviderMock = new Mock<InformationProvider>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.ViewExerciseDetails();
@@ -156,8 +162,9 @@ namespace Gymate.Tests
             exerciseServiceMock.SetupGet(m => m.Items).Returns(items);
 
             var informationProviderMock = new Mock<InformationProvider>();
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             var expectedMessage = new List<string>() { $"{exercise.Id} - {exercise.Name}" };
 
@@ -175,8 +182,9 @@ namespace Gymate.Tests
             exerciseServiceMock.SetupGet(m => m.Items).Returns(new List<Exercise>());
 
             var informationProviderMock = new Mock<InformationProvider>();
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.ShowAllExercises();
@@ -198,8 +206,9 @@ namespace Gymate.Tests
             var exerciseServiceMock = new Mock<IService<Exercise>>();
 
             exerciseServiceMock.Setup(m => m.GetAllItems()).Returns(new List<Exercise>() { exercise });
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.ViewExercisesByTypeId();
@@ -216,8 +225,9 @@ namespace Gymate.Tests
             var exerciseServiceMock = new Mock<IService<Exercise>>();
 
             exerciseServiceMock.Setup(m => m.GetAllItems()).Returns(new List<Exercise>());
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             //Act
             objectUnderTest.ViewExercisesByTypeId();
@@ -240,8 +250,9 @@ namespace Gymate.Tests
 
             informationProviderMock.Setup(m => m.GetNumericInputKey()).Returns(exercise.Id);
             informationProviderMock.Setup(m => m.GetNumericValue()).Returns(11);
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             objectUnderTest.UpdateVolumeInExercise();
 
@@ -263,8 +274,9 @@ namespace Gymate.Tests
 
             informationProviderMock.Setup(m => m.GetNumericInputKey()).Returns(exercise.Id);
             informationProviderMock.Setup(m => m.GetNumericValue()).Returns(11);
+            var fileManager = new Mock<FileManager>();
 
-            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object);
+            var objectUnderTest = new ExerciseManager(new MenuActionService(), exerciseServiceMock.Object, informationProviderMock.Object, fileManager.Object);
 
             objectUnderTest.UpdateVolumeInExercise();
 

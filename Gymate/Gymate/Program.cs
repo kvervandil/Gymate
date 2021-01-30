@@ -1,6 +1,7 @@
 ﻿using System;
 using Gymate.App.Abstract;
 using Gymate.App.Concrete;
+using Gymate.App.Helpers;
 using Gymate.App.Managers;
 using Gymate.Domain.Entity;
 
@@ -10,15 +11,17 @@ namespace Gymate
     {
         static void Main(string[] args)
         {
+            FileManager fileManager = new FileManager();
             InformationProvider informationProvider = new InformationProvider();
             MenuActionService actionService = new MenuActionService();
             IService<Exercise> exerciseService = new ExerciseService();
             IService<Routine> routineService = new RoutineService();
             ExerciseManager exerciseManager = new ExerciseManager(actionService,
                                                                   exerciseService,
-                                                                  informationProvider);
+                                                                  informationProvider,
+                                                                  fileManager);
 
-            RoutineManager routineManager = new RoutineManager(routineService, informationProvider);
+            RoutineManager routineManager = new RoutineManager(routineService, informationProvider, fileManager);
 
             Console.WriteLine("Welcome to Gymate app!");
 
@@ -27,16 +30,16 @@ namespace Gymate
 
             while (true)
             {
-                Console.WriteLine("Please let me know what you want to do:");
+                informationProvider.ShowSingleMessage("Please let me know what you want to do:");
 
                 var mainMenu = actionService.GetMenuActionsByMenuName("Main");
 
                 foreach (var menuAction in mainMenu)
                 {
-                    Console.WriteLine($"{menuAction.Id}. {menuAction.Name}");
+                    informationProvider.ShowSingleMessage($"{menuAction.Id}. {menuAction.Name}");
                 }
 
-                var operation = Console.ReadLine();
+                var operation = informationProvider.GetInputString();
                 Console.WriteLine("\n");
 
                 switch (operation)

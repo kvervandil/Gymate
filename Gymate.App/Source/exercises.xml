@@ -70,4 +70,11 @@
     <Reps>0</Reps>
     <Load>0</Load>
   </Exercise>
+  <Exercise Id="11">
+    <Name>Muscle up</Name>
+    <Type>4</Type>
+    <Sets>0</Sets>
+    <Reps>0</Reps>
+    <Load>0</Load>
+  </Exercise>
 </Exercises>
